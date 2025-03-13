@@ -1,0 +1,4 @@
+.vscode/
+integral_open_mp
+integral_mpi
+integral_sequential
