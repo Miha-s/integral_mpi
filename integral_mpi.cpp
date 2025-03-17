@@ -46,26 +46,29 @@ int main(int argc, char* argv[]) {
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    if (argc != 2) {
-        if (world_rank == 0) {
+    double a, b;
+    int numDivisions;
+
+    if (world_rank == 0) {
+        if (argc != 2) {
             std::cerr << "Usage: " << argv[0] << " <number_of_divisions>" << std::endl;
+            MPI_Abort(MPI_COMM_WORLD, 1);
         }
-        MPI_Finalize();
-        return 1;
-    }
 
-    int numDivisions = std::atoi(argv[1]);
+        numDivisions = std::atoi(argv[1]);
 
-    if (numDivisions <= 0) {
-        if (world_rank == 0) {
+        if (numDivisions <= 0) {
             std::cerr << "Number of divisions must be a positive integer." << std::endl;
+            MPI_Abort(MPI_COMM_WORLD, 1);
         }
-        MPI_Finalize();
-        return 1;
+
+        a = 0.0;
+        b = 1.0;
     }
 
-    double a = 0.0;
-    double b = 1.0;
+    MPI_Bcast(&a, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&b, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numDivisions, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     double local_result = integrate(a, b, numDivisions, world_rank, world_size);
 
