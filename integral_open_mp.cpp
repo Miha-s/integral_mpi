@@ -17,7 +17,7 @@ double integrate(double a, double b, int numDivisions) {
 
     integral += 0.5 * (slowFunction(a) + slowFunction(b));
 
-    #pragma omp parallel for reduction(+:integral)
+    #pragma omp parallel for reduction(+:integral) num_threads(8)
     for (int i = 1; i < numDivisions; ++i) {
         integral += slowFunction(a + i * h);
     }

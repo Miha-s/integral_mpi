@@ -9,4 +9,4 @@ integral_sequential: integral_sequential.cpp
 	g++ -O0 -o integral_sequential integral_sequential.cpp -lm
 
 run_integral_mpi: integral_mpi
-	mpirun --use-hwthread-cpus -np 8 ./integral_mpi $(DIVISIONS)
+	mpirun --use-hwthread-cpus -np 4 ./integral_mpi $(DIVISIONS)
